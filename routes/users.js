@@ -3,6 +3,8 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 let User = require("../models/user.model");
 const passport = require("passport");
+const validateLoginInput = require("../validation/login");
+const validateRegisterInput = require("../validation/register");
 
 require("dotenv").config();
 const key = process.env.KEY;
@@ -12,9 +14,9 @@ router.post("/register", (req, res) => {
   if (!isValid) {
     return res.status(400).json(errors);
   }
-  User.findOne({ username: req.body.username }).then((user) => {
+  User.findOne({ email: req.body.email }).then((user) => {
     if (user) {
-      errors.username = "User already exists";
+      errors.email = "Email already exists";
       return res.status(400).json(errors);
     } else {
       // create user
@@ -51,12 +53,12 @@ router.post("/login", (req, res) => {
     return res.status(400).json(errors);
   }
 
-  const username = req.body.username;
+  const email = req.body.email;
   const password = req.body.password;
 
-  User.findOne({ username }).then((user) => {
+  User.findOne({ email }).then((user) => {
     if (!user) {
-      errors.username = "This user doe not exist";
+      errors.email = "User not found";
       return res.status(400).json(errors);
     }
 
