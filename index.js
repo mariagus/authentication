@@ -1,7 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-
+const passport = require("passport");
 //environment variables
 require("dotenv").config();
 
@@ -11,6 +11,8 @@ const port = 4000;
 //middleware
 app.use(cors());
 app.use(express.json());
+app.use(passport.initialize());
+require("./config/passport")(passport);
 
 const uri = process.env.ATLAS_URI;
 mongoose
