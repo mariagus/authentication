@@ -11,3 +11,6 @@
   font-size: calc(10px + 1vmin);
   color: white;
 }
+.loginRegister {
+  display: flex;
+}

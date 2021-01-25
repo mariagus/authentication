@@ -1,8 +1,26 @@
 import "./App.css";
 import { React, useState } from "react";
+import Register from "./components/Register";
 import Login from "./components/Login";
-function App() {
-  const [token, setToken] = useState(false);
+import { PromiseProvider } from "mongoose";
+
+function App(props) {
+  const [token, setToken] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = (username, password) => {
+    setUsername(username);
+    setPassword(password);
+  };
+
+  const handleRegister = (username, email, password) => {
+    setUsername();
+    setEmail();
+    setPassword();
+    console.log(email);
+  };
 
   return (
     <div className="App">
@@ -10,7 +28,10 @@ function App() {
         {token ? (
           <h1>THIS IS A PROTECTED ROUTE REQUIRING AUTHENTICATION</h1>
         ) : (
-          <Login />
+          <div className="loginRegister">
+            <Login handleLogin={handleLogin} />
+            <Register handleRegister={handleRegister} />
+          </div>
         )}
       </header>
     </div>

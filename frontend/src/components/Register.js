@@ -1,20 +1,24 @@
 import { React, useState } from "react";
-import "./Login.css";
-function Login(props) {
+import "./Register.css";
+function Register(props) {
   // state with username input
   const [usernameInput, setUsernameInput] = useState("");
+  const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
   return (
-    <div className="login">
-      <h3>LOG IN</h3>
+    <div className="register">
+      <h3>SIGN UP</h3>
       <form>
-        <p>username:</p>
+        <p>choose a username:</p>
         <input
           type="textbox"
           onChange={(e) => setUsernameInput(e.target.value)}
         />
-        <p>password:</p>
+        <p>your email:</p>
+        <input type="textbox" onChange={(e) => setEmailInput(e.target.value)} />
+
+        <p>choose a password:</p>
         <input
           type="textbox"
           onChange={(e) => setPasswordInput(e.target.value)}
@@ -25,14 +29,14 @@ function Login(props) {
           id="button"
           onClick={(e) => {
             e.preventDefault();
-            props.handleLogin(usernameInput, passwordInput);
+            props.handleRegister(usernameInput, emailInput, passwordInput);
           }}
         >
-          Login
+          Sign up
         </button>
       </form>
     </div>
   );
 }
 
-export default Login;
+export default Register;
