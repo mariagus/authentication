@@ -5,23 +5,29 @@ function Register(props) {
   const [usernameInput, setUsernameInput] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
+  const [password2Input, setPassword2Input] = useState("");
 
   return (
     <div className="register">
       <h3>SIGN UP</h3>
       <form>
-        <p>choose a username:</p>
+        <p>username:</p>
         <input
           type="textbox"
           onChange={(e) => setUsernameInput(e.target.value)}
         />
-        <p>your email:</p>
+        <p>email:</p>
         <input type="textbox" onChange={(e) => setEmailInput(e.target.value)} />
 
-        <p>choose a password:</p>
+        <p>password:</p>
         <input
           type="textbox"
           onChange={(e) => setPasswordInput(e.target.value)}
+        />
+        <p>reenter password:</p>
+        <input
+          type="textbox"
+          onChange={(e) => setPassword2Input(e.target.value)}
         />
         <br />
         {/* call callback with local state as args */}
@@ -29,7 +35,12 @@ function Register(props) {
           id="button"
           onClick={(e) => {
             e.preventDefault();
-            props.handleRegister(usernameInput, emailInput, passwordInput);
+            props.handleRegister(
+              usernameInput,
+              emailInput,
+              passwordInput,
+              password2Input
+            );
           }}
         >
           Sign up
