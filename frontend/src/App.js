@@ -7,16 +7,8 @@ import { setAuthToken, createUser, loginUser } from "./util/session_api_util";
 
 function App(props) {
   const [token, setToken] = useState(false);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [password2, setPassword2] = useState("");
-
-  //useEffect setAuthToken...
 
   const handleLogin = async (email, password) => {
-    setEmail(email);
-    setPassword(password);
     const payload = {
       email: email,
       password: password,
@@ -27,11 +19,6 @@ function App(props) {
   };
 
   const handleRegister = async (username, email, password, password2) => {
-    setUsername(username);
-    setEmail(email);
-    setPassword(password);
-    setPassword2(password2);
-
     const payload = {
       username: username,
       email: email,
