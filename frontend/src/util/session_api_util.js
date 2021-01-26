@@ -1,10 +1,11 @@
 import axios from "axios";
-import jwtDecode from "jwt-decode";
+import jwtDecoder from "./helperFunctions";
 
 const url = "http://localhost:4000/user/";
 
 export const setAuthToken = (token) => {
   if (token) {
+    console.log(token);
     axios.defaults.headers.common["Authorization"] = token;
   } else {
     delete axios.defaults.headers.common["Authorization"];
@@ -22,6 +23,7 @@ export async function loginUser(payload) {
 }
 
 export function getUsername(token, setState) {
-  localStorage.username = jwtDecode(token).username;
+  localStorage.username = jwtDecoder(token).username;
+  console.log(jwtDecoder(token));
   return localStorage.username;
 }
