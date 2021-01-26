@@ -2,8 +2,7 @@ import "./App.css";
 import { React, useEffect, useState } from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import { PromiseProvider } from "mongoose";
-import { setAuthToken, createUser, loginUser } from "./util/session_api_util";
+import { createUser, loginUser } from "./util/session_api_util";
 
 function App(props) {
   const [token, setToken] = useState(false);

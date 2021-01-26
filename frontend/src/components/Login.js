@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import "./Login.css";
 function Login(props) {
-  // state with username input
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
 
@@ -9,7 +8,7 @@ function Login(props) {
     <div className="login">
       <h3>LOG IN</h3>
       <form>
-        <p>username:</p>
+        <p>email:</p>
         <input type="textbox" onChange={(e) => setEmailInput(e.target.value)} />
         <p>password:</p>
         <input

@@ -1,7 +1,6 @@
 import { React, useState } from "react";
 import "./Register.css";
 function Register(props) {
-  // state with username input
   const [usernameInput, setUsernameInput] = useState("");
   const [emailInput, setEmailInput] = useState("");
   const [passwordInput, setPasswordInput] = useState("");
@@ -24,7 +23,7 @@ function Register(props) {
           type="textbox"
           onChange={(e) => setPasswordInput(e.target.value)}
         />
-        <p>reenter password:</p>
+        <p>re-enter password:</p>
         <input
           type="textbox"
           onChange={(e) => setPassword2Input(e.target.value)}
