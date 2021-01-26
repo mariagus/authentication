@@ -12,11 +12,11 @@ export const setAuthToken = (token) => {
 };
 
 export async function createUser(payload) {
-  const { data: success } = await axios.post(`${url}/register`, payload);
-  return success;
+  const { data } = await axios.post(`${url}/register`, payload);
+  return data;
 }
 
 export async function loginUser(payload) {
   const { data } = await axios.post(`${url}/login`, payload);
-  return data.success;
+  return data;
 }
