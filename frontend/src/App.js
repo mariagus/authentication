@@ -2,18 +2,19 @@ import "./App.css";
 import { React, useEffect, useState } from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import { createUser, loginUser } from "./util/session_api_util";
-//import jwt_decode from "jwt-decode";
+import { createUser, loginUser, getUsername } from "./util/session_api_util";
 
 function App(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [username, setUsername] = useState("");
 
   //useEffect to monitor whether the user is still logged in?
   useEffect(() => {
     localStorage.jwtToken ? setLoggedIn(true) : setLoggedIn(false);
+    loggedIn ? setUsername(localStorage.username) : setUsername("");
     setLoading(false);
-  }, [loggedIn]);
+  }, [loggedIn, username]);
 
   const handleLogin = async (email, password) => {
     const payload = {
@@ -23,6 +24,7 @@ function App(props) {
     const result = await loginUser(payload);
     localStorage.jwtToken = result.token;
     setLoggedIn(result.success);
+    setUsername(getUsername(result.token));
   };
 
   const handleRegister = async (username, email, password, password2) => {
@@ -34,7 +36,7 @@ function App(props) {
     };
     const result = await createUser(payload);
     localStorage.jwtToken = result.token;
-    setLoggedIn(result.success);
+    setUsername(getUsername(result.token));
   };
 
   const handleLogout = () => {
@@ -55,7 +57,7 @@ function App(props) {
       <header className="App-header">
         {loggedIn ? (
           <div>
-            <h1>You're in</h1>
+            <h1>You're in, {username}!</h1>
             <button onClick={() => handleLogout()}>LOGOUT</button>
           </div>
         ) : (
