@@ -2,7 +2,12 @@ import "./App.css";
 import { React, useEffect, useState } from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import { createUser, loginUser, getUsername } from "./util/session_api_util";
+import {
+  createUser,
+  loginUser,
+  getUsername,
+  setAuthToken,
+} from "./util/session_api_util";
 
 function App(props) {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -11,7 +16,12 @@ function App(props) {
 
   //useEffect to monitor whether the user is still logged in?
   useEffect(() => {
-    localStorage.jwtToken ? setLoggedIn(true) : setLoggedIn(false);
+    if (localStorage.jwtToken) {
+      setLoggedIn(true);
+      setAuthToken(localStorage.jwtToken);
+    } else {
+      setLoggedIn(false);
+    }
     loggedIn ? setUsername(localStorage.username) : setUsername("");
     setLoading(false);
   }, [loggedIn, username]);
