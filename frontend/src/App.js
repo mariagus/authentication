@@ -36,10 +36,15 @@ function App(props) {
       email: email,
       password: password,
     };
-    const result = await loginUser(payload);
-    localStorage.setItem("jwtToken", result.token);
-    setLoggedIn(result.success);
-    getUserInfo();
+
+    try {
+      const data = await loginUser(payload);
+      localStorage.setItem("jwtToken", data.token);
+      setLoggedIn(data.success);
+      getUserInfo();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const handleRegister = async (username, email, password, password2) => {
@@ -56,7 +61,7 @@ function App(props) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("jwtToken");
+    localStorage.clear();
     setUsername("");
     setLoggedIn(false);
     setUserInfo([]);
