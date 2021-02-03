@@ -19,3 +19,13 @@ export async function loginUser(payload) {
   const { data } = await axios.post(`${url}login`, payload);
   return data;
 }
+
+export async function getCurrentUser() {
+  const { data } = await axios.get(`${url}current`);
+  let arr = [];
+  for (const [key, val] of Object.entries(data)) {
+    arr.push(`${key}: ${val}`);
+  }
+  console.log(arr);
+  return arr;
+}

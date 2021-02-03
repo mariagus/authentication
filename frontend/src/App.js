@@ -2,25 +2,30 @@ import "./App.css";
 import { React, useEffect, useState } from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
+
 import jwtDecoder from "./util/helperFunctions";
-import { createUser, loginUser, setAuthToken } from "./util/session_api_util";
+import {
+  createUser,
+  loginUser,
+  setAuthToken,
+  getCurrentUser,
+} from "./util/session_api_util";
 
 function App(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
-
+  const [userInfo, setUserInfo] = useState([]);
   //useEffect to monitor whether the user is still logged in
   useEffect(() => {
-    if (loggedIn) {
+    if (localStorage.jwtToken) {
+      setLoggedIn(true);
+      getUserInfo();
       setAuthToken(localStorage.jwtToken);
       const decodedUser = jwtDecoder(localStorage.jwtToken);
       setUsername(decodedUser.username);
       if (decodedUser.exp > Date.now()) {
-        setLoggedIn(false);
-        localStorage.jwtToken = "";
-        setAuthToken("");
-        setUsername("");
+        handleLogout();
       }
     }
     setLoading(false);
@@ -32,8 +37,9 @@ function App(props) {
       password: password,
     };
     const result = await loginUser(payload);
-    localStorage.jwtToken = result.token;
+    localStorage.setItem("jwtToken", result.token);
     setLoggedIn(result.success);
+    getUserInfo();
   };
 
   const handleRegister = async (username, email, password, password2) => {
@@ -44,13 +50,21 @@ function App(props) {
       password2: password2,
     };
     const result = await createUser(payload);
-    localStorage.jwtToken = result.token;
+    localStorage.setItem("jwtToken", result.token);
     setLoggedIn(result.success);
+    getUserInfo();
   };
 
   const handleLogout = () => {
-    localStorage.jwtToken = "";
+    localStorage.removeItem("jwtToken");
+    setUsername("");
     setLoggedIn(false);
+    setUserInfo([]);
+  };
+
+  const getUserInfo = async () => {
+    const result = await getCurrentUser();
+    setUserInfo(result);
   };
 
   if (loading) {
@@ -67,7 +81,16 @@ function App(props) {
         {loggedIn ? (
           <div>
             <h1>You're in, {username}!</h1>
-            <button onClick={() => handleLogout()}>LOGOUT</button>
+
+            {userInfo.map((el, i) => (
+              <li key={i} style={{ textAlign: "left" }}>
+                {el}
+              </li>
+            ))}
+
+            <button onClick={() => handleLogout()} style={{ margin: "1rem" }}>
+              LOGOUT
+            </button>
           </div>
         ) : (
           <div className="loginRegister">
