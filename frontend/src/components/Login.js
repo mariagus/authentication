@@ -18,6 +18,7 @@ function Login(props) {
         <br />
         {/* call callback with local state as args */}
         <button
+          style={{ margin: "2em" }}
           id="button"
           onClick={(e) => {
             e.preventDefault();
@@ -26,6 +27,11 @@ function Login(props) {
         >
           Login
         </button>
+        <div>
+          {props.loginError.map((errors) => (
+            <li style={{ color: "red", listStyle: "none" }}>{errors}</li>
+          ))}
+        </div>
       </form>
     </div>
   );

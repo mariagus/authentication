@@ -16,7 +16,8 @@ function App(props) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [userInfo, setUserInfo] = useState([]);
-  const [error, setError] = useState();
+  const [loginError, setLoginError] = useState([]);
+  const [registerError, setRegisterError] = useState([]);
 
   useEffect(() => {
     if (localStorage.jwtToken) {
@@ -44,7 +45,8 @@ function App(props) {
       setLoggedIn(data.success);
       getUserInfo();
     } catch (err) {
-      console.log(err.response.data);
+      const errors = handleError(err.response.data);
+      setLoginError(errors);
     }
   };
 
@@ -55,10 +57,15 @@ function App(props) {
       password: password,
       password2: password2,
     };
-    const result = await createUser(payload);
-    localStorage.setItem("jwtToken", result.token);
-    setLoggedIn(result.success);
-    getUserInfo();
+    try {
+      const { data } = await createUser(payload);
+      localStorage.setItem("jwtToken", data.token);
+      setLoggedIn(data.success);
+      getUserInfo();
+    } catch (err) {
+      const errors = handleError(err.response.data);
+      setRegisterError(errors);
+    }
   };
 
   const handleLogout = () => {
@@ -67,6 +74,8 @@ function App(props) {
     setLoggedIn(false);
     setUserInfo([]);
   };
+
+  const handleError = (err) => Object.values(err);
 
   const getUserInfo = async () => {
     const result = await getCurrentUser();
@@ -100,8 +109,11 @@ function App(props) {
           </div>
         ) : (
           <div className="loginRegister">
-            <Login handleLogin={handleLogin} />
-            <Register handleRegister={handleRegister} />
+            <Login handleLogin={handleLogin} loginError={loginError} />
+            <Register
+              handleRegister={handleRegister}
+              registerError={registerError}
+            />
           </div>
         )}
       </header>

@@ -44,6 +44,11 @@ function Register(props) {
         >
           Sign up
         </button>
+        <div>
+          {props.registerError.map((errors) => (
+            <li style={{ color: "red", listStyle: "none" }}>{errors}</li>
+          ))}
+        </div>
       </form>
     </div>
   );

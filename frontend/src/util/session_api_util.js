@@ -10,9 +10,8 @@ export const setAuthToken = (token) => {
   }
 };
 
-export async function createUser(payload) {
-  const { data } = await axios.post(`${url}register`, payload);
-  return data;
+export function createUser(payload) {
+  return axios.post(`${url}register`, payload);
 }
 
 export function loginUser(payload) {
