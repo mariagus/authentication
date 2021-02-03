@@ -2,27 +2,27 @@ import "./App.css";
 import { React, useEffect, useState } from "react";
 import Register from "./components/Register";
 import Login from "./components/Login";
-import {
-  createUser,
-  loginUser,
-  getUsername,
-  setAuthToken,
-} from "./util/session_api_util";
+import jwtDecoder from "./util/helperFunctions";
+import { createUser, loginUser, setAuthToken } from "./util/session_api_util";
 
 function App(props) {
   const [loggedIn, setLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
 
-  //useEffect to monitor whether the user is still logged in?
+  //useEffect to monitor whether the user is still logged in
   useEffect(() => {
-    if (localStorage.jwtToken) {
-      setLoggedIn(true);
+    if (loggedIn) {
       setAuthToken(localStorage.jwtToken);
-    } else {
-      setLoggedIn(false);
+      const decodedUser = jwtDecoder(localStorage.jwtToken);
+      setUsername(decodedUser.username);
+      if (decodedUser.exp > Date.now()) {
+        setLoggedIn(false);
+        localStorage.jwtToken = "";
+        setAuthToken("");
+        setUsername("");
+      }
     }
-    loggedIn ? setUsername(localStorage.username) : setUsername("");
     setLoading(false);
   }, [loggedIn, username]);
 
@@ -34,7 +34,6 @@ function App(props) {
     const result = await loginUser(payload);
     localStorage.jwtToken = result.token;
     setLoggedIn(result.success);
-    setUsername(getUsername(result.token));
   };
 
   const handleRegister = async (username, email, password, password2) => {
@@ -46,7 +45,7 @@ function App(props) {
     };
     const result = await createUser(payload);
     localStorage.jwtToken = result.token;
-    setUsername(getUsername(result.token));
+    setLoggedIn(result.success);
   };
 
   const handleLogout = () => {
