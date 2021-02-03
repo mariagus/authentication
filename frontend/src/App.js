@@ -16,12 +16,13 @@ function App(props) {
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState("");
   const [userInfo, setUserInfo] = useState([]);
-  //useEffect to monitor whether the user is still logged in
+  const [error, setError] = useState();
+
   useEffect(() => {
     if (localStorage.jwtToken) {
+      setAuthToken(localStorage.jwtToken);
       setLoggedIn(true);
       getUserInfo();
-      setAuthToken(localStorage.jwtToken);
       const decodedUser = jwtDecoder(localStorage.jwtToken);
       setUsername(decodedUser.username);
       if (decodedUser.exp > Date.now()) {
@@ -38,12 +39,12 @@ function App(props) {
     };
 
     try {
-      const data = await loginUser(payload);
+      const { data } = await loginUser(payload);
       localStorage.setItem("jwtToken", data.token);
       setLoggedIn(data.success);
       getUserInfo();
     } catch (err) {
-      console.log(err);
+      console.log(err.response.data);
     }
   };
 

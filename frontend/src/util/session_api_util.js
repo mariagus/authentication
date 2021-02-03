@@ -15,11 +15,8 @@ export async function createUser(payload) {
   return data;
 }
 
-export async function loginUser(payload) {
-  const { data } = await axios.post(`${url}login`, payload).catch((error) => {
-    return error.response.data;
-  });
-  return data;
+export function loginUser(payload) {
+  return axios.post(`${url}login`, payload);
 }
 
 export async function getCurrentUser() {
