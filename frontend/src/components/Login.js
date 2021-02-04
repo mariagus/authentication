@@ -29,7 +29,9 @@ function Login(props) {
         </button>
         <div>
           {props.loginError.map((errors) => (
-            <li style={{ color: "red", listStyle: "none" }}>{errors}</li>
+            <li style={{ color: "red", listStyle: "none", fontSize: "small" }}>
+              Error: {errors}
+            </li>
           ))}
         </div>
       </form>

@@ -18,20 +18,23 @@ function App(props) {
   const [userInfo, setUserInfo] = useState([]);
   const [loginError, setLoginError] = useState([]);
   const [registerError, setRegisterError] = useState([]);
+  const [tokenExp, setTokenExp] = useState(0);
 
   useEffect(() => {
-    if (localStorage.jwtToken) {
-      setAuthToken(localStorage.jwtToken);
+    const token = localStorage.jwtToken;
+
+    if (token) {
+      const decodedUser = jwtDecoder(token);
+      setTokenExp(decodedUser.exp);
+      setAuthToken(token);
       setLoggedIn(true);
       getUserInfo();
-      const decodedUser = jwtDecoder(localStorage.jwtToken);
-      setUsername(decodedUser.username);
-      if (decodedUser.exp > Date.now()) {
+      if (tokenExp > Date.now()) {
         handleLogout();
       }
     }
     setLoading(false);
-  }, [loggedIn, username]);
+  }, [loggedIn, username, tokenExp]);
 
   const handleLogin = async (email, password) => {
     const payload = {
