@@ -23,11 +23,11 @@ function App(props) {
   useEffect(() => {
     const token = localStorage.jwtToken;
 
-    if (token) {
+    if (token && loggedIn) {
       const decodedUser = jwtDecoder(token);
-      setTokenExp(decodedUser.exp);
       setAuthToken(token);
-      setLoggedIn(true);
+      setTokenExp(decodedUser.exp);
+      setUsername(decodedUser.username);
       getUserInfo();
       if (tokenExp > Date.now()) {
         handleLogout();
@@ -72,10 +72,8 @@ function App(props) {
   };
 
   const handleLogout = () => {
-    localStorage.clear();
-    setUsername("");
     setLoggedIn(false);
-    setUserInfo([]);
+    localStorage.clear();
   };
 
   const handleError = (err) => Object.values(err);
